@@ -1,0 +1,28 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="using:YoutubeDownloader"
+             x:Class="YoutubeDownloader.App"
+             xmlns:themes="clr-namespace:Material.Styles.Themes;assembly=Material.Styles">
+  <Application.DataTemplates>
+    <local:ViewLocator/>
+  </Application.DataTemplates>
+
+  <Application.Resources>
+    <themes:BundledTheme
+        BaseTheme="Light"
+        PrimaryColor="Blue"
+        SecondaryColor="Blue" />
+
+    <Color x:Key="SuccessColor">#006400</Color>
+    <Color x:Key="CanceledColor">#FF8C00</Color>
+    <Color x:Key="FailedColor">#8B0000</Color>
+
+    <SolidColorBrush x:Key="SuccessBrush" Color="{DynamicResource SuccessColor}" />
+    <SolidColorBrush x:Key="CanceledBrush" Color="{DynamicResource CanceledColor}" />
+    <SolidColorBrush x:Key="FailedBrush" Color="{DynamicResource FailedColor}" />
+  </Application.Resources>
+  <Application.Styles>
+    <StyleInclude Source="avares://Material.Avalonia/Material.Avalonia.Templates.xaml" />
+    <StyleInclude Source="avares://DialogHost.Avalonia/Styles.xaml"/>
+  </Application.Styles>
+</Application>

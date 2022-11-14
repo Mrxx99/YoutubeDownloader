@@ -1,0 +1,44 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:YoutubeDownloader.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:dialogHost="clr-namespace:DialogHost;assembly=DialogHost.Avalonia"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+        xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+        xmlns:e="clr-namespace:EventBinder;assembly=EventBinder.Avalonia"
+        x:Class="YoutubeDownloader.Views.RootView"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="YoutubeDownloader">
+
+    <Design.DataContext>
+        <vm:RootViewModel/>
+    </Design.DataContext>
+
+  <dialogHost:DialogHost
+    x:Name="DialogHost"
+    AttachedToVisualTree="{e:EventBinding OnViewFullyLoaded}"
+    CloseOnClickAway="True">
+    <!--<i:Interaction.Behaviors>
+      <ia:EventTriggerBehavior EventName="AttachedToVisualTree" SourceObject="DialogHost">
+        <ia:CallMethodAction TargetObject="{Binding}" MethodName="OnLoaded" />
+      </ia:EventTriggerBehavior>
+    </i:Interaction.Behaviors>-->
+    <StackPanel>
+      <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+      <Button Content="Settings" Command="{Binding OpenSettings}"/>
+      <Button Content="SaveFile" Command="{Binding SaveFile}"/>
+      <Button Content="OpenFolder" Command="{Binding OpenFolder}"/>
+      <!--<Button x:Name="IncrementButton" Content="Increment" Grid.Row="1" Grid.Column="4" Margin="0,0,5,5">
+        <i:Interaction.Behaviors>
+          <ia:EventTriggerBehavior EventName="Click" SourceObject="IncrementButton">
+            <ia:CallMethodAction TargetObject="{Binding}" MethodName="IncrementCount" />
+          </ia:EventTriggerBehavior>
+        </i:Interaction.Behaviors>
+      </Button>-->
+    </StackPanel>
+  </dialogHost:DialogHost>
+
+
+</Window>
