@@ -8,7 +8,7 @@ using YoutubeDownloader.ViewModels.Dialogs;
 using YoutubeDownloader.ViewModels.Framework;
 
 namespace YoutubeDownloader.ViewModels;
-public class RootViewModel : ViewModelBase
+public partial class RootViewModel : ViewModelBase
 {
     private readonly IViewModelFactory _viewModelFactory;
     private readonly DialogManager _dialogManager;
@@ -21,7 +21,7 @@ public class RootViewModel : ViewModelBase
 
     public string DisplayName { get; set; }
 
-    public DashboardViewModel Dashboard { get; }
+    public DashboardViewModel Dashboard { get; protected set; }
 
     public RootViewModel(
         IViewModelFactory viewModelFactory,
