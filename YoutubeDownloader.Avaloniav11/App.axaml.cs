@@ -19,7 +19,7 @@ public partial class App
 {
     private static Assembly Assembly { get; } = typeof(App).Assembly;
 
-    public static new string Name { get; } = Assembly.GetName().Name!;
+    public new static string Name { get; } = Assembly.GetName().Name!;
 
     public static Version Version { get; } = Assembly.GetName().Version!;
 
@@ -29,7 +29,7 @@ public partial class App
 [DoNotNotify]
 public partial class App : Application
 {
-    private readonly IServiceProvider _serviceProvider;
+    private readonly IServiceProvider? _serviceProvider;
 
     public App(IServiceProvider serviceProvider)
     {
@@ -38,9 +38,9 @@ public partial class App : Application
 
     // For Designer
 #nullable disable
-    //public App()
-    //{
-    //}
+    public App()
+    {
+    }
 #nullable restore
 
     public override void Initialize()
@@ -50,6 +50,11 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
+        if (_serviceProvider is null)
+        {
+            return; // fix for Designer
+        }
+
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             var rootViewModel = ActivatorUtilities.CreateInstance<RootViewModel>(_serviceProvider);
