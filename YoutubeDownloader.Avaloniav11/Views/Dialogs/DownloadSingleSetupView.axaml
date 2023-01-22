@@ -9,6 +9,7 @@
     xmlns:converters="clr-namespace:YoutubeDownloader.Converters"
     xmlns:materialIcon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:materialAssist="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
+    xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
     Width="500"
     mc:Ignorable="d">
   <Grid>
@@ -73,7 +74,7 @@
         Grid.Row="1"
         BorderBrush="{DynamicResource MaterialDesignDivider}"
         BorderThickness="0,1">
-      <Image Source="{Binding Video, Converter={x:Static converters:VideoToHighestQualityThumbnailUrlConverter.Instance}}" />
+      <Image asyncImageLoader:ImageLoader.Source="{Binding Video, Converter={x:Static converters:VideoToHighestQualityThumbnailUrlConverter.Instance}}" />
     </Border>
 
     <Grid Grid.Row="2" Margin="16">
