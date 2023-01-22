@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using Avalonia.Controls;
 using MessageBox.Avalonia;
 
@@ -9,8 +8,7 @@ namespace YoutubeDownloader;
 
 public static class Sanctions
 {
-    //[ModuleInitializer]
-    internal async static Task Verify(Window window)
+    internal static void Verify(Window window)
     {
         var isSkipped = string.Equals(
             Environment.GetEnvironmentVariable("RUSNI"),
@@ -28,7 +26,7 @@ public static class Sanctions
             CultureInfo.InstalledUICulture,
             CultureInfo.DefaultThreadCurrentCulture,
             CultureInfo.DefaultThreadCurrentUICulture
-        }.Any(c => 
+        }.Any(c =>
             c is not null && (
                 c.Name.Contains("-ru", StringComparison.OrdinalIgnoreCase) ||
                 c.Name.Contains("-by", StringComparison.OrdinalIgnoreCase)
@@ -38,13 +36,17 @@ public static class Sanctions
         if (!isSanctioned)
             return;
 
-        var sanctionMessageBox = MessageBoxManager.GetMessageBoxStandardWindow(
-            "Sanctioned region",
-            "You cannot use this software on the territory of a terrorist state. " +
-            "Set the environment variable `RUSNI=PYZDA` if you wish to override this check.",
-            icon: MessageBox.Avalonia.Enums.Icon.Error);
-        await sanctionMessageBox.ShowDialog(window);
+        window.Opened += async (sender, args) =>
+        {
+            var sanctionMessageBox = MessageBoxManager.GetMessageBoxStandardWindow(
+                "Sanctioned region",
+                "You cannot use this software on the territory of a terrorist state. " +
+                "Set the environment variable `RUSNI=PYZDA` if you wish to override this check.",
+                icon: MessageBox.Avalonia.Enums.Icon.Error);
 
-        Environment.Exit(0xFACC);
+            await sanctionMessageBox.ShowDialog(window);
+
+            Environment.Exit(0xFACC);
+        };
     }
 }
