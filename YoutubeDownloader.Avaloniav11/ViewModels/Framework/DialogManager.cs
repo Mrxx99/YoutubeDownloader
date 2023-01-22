@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reactive.Joins;
 using System.Threading;
 using System.Threading.Tasks;
-using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using Avalonia.Platform.Storage.FileIO;
 using DialogHostAvalonia;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace YoutubeDownloader.ViewModels.Framework;
 

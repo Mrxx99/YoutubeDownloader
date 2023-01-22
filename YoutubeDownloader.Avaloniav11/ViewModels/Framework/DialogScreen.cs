@@ -14,9 +14,9 @@ public abstract class DialogScreen<T> : ViewModelBase
         Closed?.Invoke(this, EventArgs.Empty);
     }
 
-    public void Close()
+    public void Close(object? dialogResult)
     {
-        Close(default(T));
+        Close((T?)dialogResult);
     }
 }
 
