@@ -8,10 +8,11 @@ namespace YoutubeDownloader.Services;
 
 public class UpdateService : IDisposable
 {
-    private readonly IUpdateManager _updateManager = new UpdateManager(
-        new GithubPackageResolver("Tyrrrz", "YoutubeDownloader", "YoutubeDownloader.zip"),
-        new ZipPackageExtractor()
-    );
+    private readonly IUpdateManager? _updateManager = OperatingSystem.IsWindows() 
+        ? new UpdateManager(
+            new GithubPackageResolver("Tyrrrz", "YoutubeDownloader", "YoutubeDownloader.zip"),
+            new ZipPackageExtractor())
+        : null;
 
     private readonly SettingsService _settingsService;
 
@@ -26,21 +27,21 @@ public class UpdateService : IDisposable
 
     public async Task<Version?> CheckForUpdatesAsync()
     {
-        if (!_settingsService.IsAutoUpdateEnabled)
+        if (!_settingsService.IsAutoUpdateEnabled || !OperatingSystem.IsWindows())
             return null;
 
-        var check = await _updateManager.CheckForUpdatesAsync();
+        var check = await _updateManager!.CheckForUpdatesAsync();
         return check.CanUpdate ? check.LastVersion : null;
     }
 
     public async Task PrepareUpdateAsync(Version version)
     {
-        if (!_settingsService.IsAutoUpdateEnabled)
+        if (!_settingsService.IsAutoUpdateEnabled || !OperatingSystem.IsWindows())
             return;
 
         try
         {
-            await _updateManager.PrepareUpdateAsync(_updateVersion = version);
+            await _updateManager!.PrepareUpdateAsync(_updateVersion = version);
             _updatePrepared = true;
         }
         catch (UpdaterAlreadyLaunchedException)
@@ -63,7 +64,7 @@ public class UpdateService : IDisposable
 
         try
         {
-            _updateManager.LaunchUpdater(_updateVersion, needRestart);
+            _updateManager?.LaunchUpdater(_updateVersion, needRestart);
             _updaterLaunched = true;
         }
         catch (UpdaterAlreadyLaunchedException)
@@ -76,5 +77,5 @@ public class UpdateService : IDisposable
         }
     }
 
-    public void Dispose() => _updateManager.Dispose();
+    public void Dispose() => _updateManager?.Dispose();
 }
