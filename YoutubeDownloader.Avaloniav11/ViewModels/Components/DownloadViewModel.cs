@@ -49,7 +49,11 @@ public class DownloadViewModel : ViewModelBase, IDisposable
         _viewModelFactory = viewModelFactory;
         _dialogManager = dialogManager;
 
-        Progress.WhenAnyValue(o => o.Current).Subscribe(_ => this.RaisePropertyChanged(nameof(IsProgressIndeterminate)));
+        Progress.WhenAnyValue(o => o.Current).Subscribe(_ =>
+        {
+            this.RaisePropertyChanged(nameof(IsProgressIndeterminate));
+            this.RaisePropertyChanged(nameof(IsRunning));
+        });
     }
 
     public bool CanCancel => Status is DownloadStatus.Enqueued or DownloadStatus.Started;
