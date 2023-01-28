@@ -19,17 +19,17 @@
     <PackageReference Include="Avalonia.Desktop" Version="11.0.0-preview4" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.0-preview4" />
-    <PackageReference Include="XamlNameReferenceGenerator" Version="1.4.2" />
+    <PackageReference Include="XamlNameReferenceGenerator" Version="1.5.1" />
     
     <!-- MVVM and DI -->
     <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.0-preview4" />
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     
     <!-- Material -->
-    <PackageReference Include="Material.Avalonia" Version="3.0.0-avalonia11-preview2.121-nightly" />
-    <PackageReference Include="Material.Icons.Avalonia" Version="1.2.0" />
-    <PackageReference Include="DialogHost.Avalonia" Version="0.6.0" />
+    <PackageReference Include="Material.Avalonia" Version="3.0.0-avalonia11-preview2.137-nightly" />
+    <PackageReference Include="Material.Icons.Avalonia" Version="1.2.2" />
+    <PackageReference Include="DialogHost.Avalonia" Version="0.7.0-preview3" />
     
     <!-- Other Controls -->
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.0-preview4" />
@@ -37,10 +37,10 @@
     
     <!-- Interaction -->
     <PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.0.0-preview4" />
-    <PackageReference Include="EventBinder.Avalonia" Version="2.5.0.1" />
+    <PackageReference Include="EventBinder.Avalonia" Version="2.5.0.2" />
     
-    <PackageReference Include="DotnetRuntimeBootstrapper" Version="2.3.1" PrivateAssets="all" />
-    <PackageReference Include="Onova" Version="2.6.2" />
+    <PackageReference Include="DotnetRuntimeBootstrapper" Version="2.4.0" PrivateAssets="all" />
+    <PackageReference Include="Onova" Version="2.6.4" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="all" />
     <PackageReference Include="Tyrrrz.Settings" Version="1.3.4" />
   </ItemGroup>
@@ -48,8 +48,9 @@
     <ProjectReference Include="..\YoutubeDownloader.Core\YoutubeDownloader.Core.csproj" />
   </ItemGroup>
 
+  <!-- TODO find replacement for all platforms -->
   <!-- This downloads FFmpeg and copies it to output directory-->
-  <Target Name="Download FFmpeg before build" BeforeTargets="PreBuildEvent">
+  <!--<Target Name="Download FFmpeg before build" BeforeTargets="PreBuildEvent">
     <Exec Command="powershell -ExecutionPolicy Bypass -File &quot;$(ProjectDir)/DownloadFFmpeg.ps1&quot;" />
     <Copy SourceFiles="$(ProjectDir)/ffmpeg.exe" DestinationFiles="$(OutDir)/ffmpeg.exe" />
   </Target>
@@ -57,5 +58,5 @@
   <Target Name="Download FFmpeg before publish" BeforeTargets="PrepareForPublish">
     <Exec Command="powershell -ExecutionPolicy Bypass -File &quot;$(ProjectDir)/DownloadFFmpeg.ps1&quot;" />
     <Copy SourceFiles="$(ProjectDir)/ffmpeg.exe" DestinationFiles="$(PublishDir)/ffmpeg.exe" />
-  </Target>
+  </Target>-->
 </Project>
