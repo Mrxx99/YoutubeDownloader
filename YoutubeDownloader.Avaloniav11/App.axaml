@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="using:YoutubeDownloader"
              x:Class="YoutubeDownloader.App"
+             xmlns:materialDesign="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
              xmlns:themes="clr-namespace:Material.Styles.Themes;assembly=Material.Styles">
   <Application.DataTemplates>
     <local:ViewLocator/>
@@ -15,11 +16,78 @@
     <SolidColorBrush x:Key="SuccessBrush" Color="{DynamicResource SuccessColor}" />
     <SolidColorBrush x:Key="CanceledBrush" Color="{DynamicResource CanceledColor}" />
     <SolidColorBrush x:Key="FailedBrush" Color="{DynamicResource FailedColor}" />
+
+    <ControlTheme x:Key="MaterialDesignRoot" TargetType="{x:Type Control}">
+      <Setter Property="TextElement.FontFamily" Value="{DynamicResource MaterialDesignFont}" />
+      <!--<Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality" />-->
+      <!--<Setter Property="SnapsToDevicePixels" Value="True" />-->
+      <Setter Property="TextElement.FontSize" Value="13" />
+      <Setter Property="TextElement.FontWeight" Value="Regular" />
+      <Setter Property="TextElement.Foreground" Value="{DynamicResource MaterialDesignBody}" />
+      <!--<Setter Property="TextOptions.TextFormattingMode" Value="Ideal" />
+      <Setter Property="TextOptions.TextRenderingMode" Value="Auto" />-->
+      <Setter Property="UseLayoutRounding" Value="True" />
+    </ControlTheme>
   </Application.Resources>
   <Application.Styles>
     <themes:MaterialThemeBase/>
+    <StyleInclude Source="avares://Material.Styles/Resources/Compatibility/Index.axaml"/>
     <StyleInclude Source="avares://Material.DataGrid/DataGrid.xaml"/>
     <StyleInclude Source="avares://DialogHost.Avalonia/Styles.xaml"/>
     <StyleInclude Source="avares://Material.Icons.Avalonia/App.xaml"/>
+
+    <Style Selector="ProgressBar">
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="Foreground" Value="{DynamicResource SecondaryHueMidBrush}" />
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="Maximum" Value="1" />
+      <Setter Property="Minimum" Value="0" />
+      <Style Selector="^:not(.circular)">
+        <Setter Property="Height" Value="2" />
+      </Style>
+    </Style>
+
+    <Style Selector="DataGrid">
+      <Setter Property="BorderThickness" Value="0"/>
+      <Setter Property="AutoGenerateColumns" Value="False" />
+      <!--<Setter Property="CanUserAddRows" Value="False" />-->
+      <!--<Setter Property="CanUserDeleteRows" Value="False" />-->
+      <Setter Property="CanUserReorderColumns" Value="True" />
+      <Setter Property="CanUserResizeColumns" Value="True" />
+      <Setter Property="CanUserSortColumns" Value="True" />
+      <Setter Property="IsReadOnly" Value="True" />
+      <Setter Property="SelectionMode" Value="Single" />
+      <!--<Setter Property="SelectionUnit" Value="FullRow" />-->
+    </Style>
+
+    <Style Selector="DataGridRow">
+      <Setter Property="FocusAdorner" Value="{x:Null}" />
+    </Style>
+
+    <Style Selector="DataGridCell">
+      <Setter Property="FocusAdorner" Value="{x:Null}" />
+      <Style Selector="^:selected">
+        <Setter Property="Background" Value="{x:Null}" />
+        <Setter Property="BorderBrush" Value="{x:Null}" />
+      </Style>
+    </Style>
+
+    <Style Selector="materialDesign|SnackbarHost">
+      <Setter Property="SnackbarHorizontalAlignment" Value="Stretch"/>
+      <Setter Property="VerticalContentAlignment" Value="Center" />
+
+      <Style Selector="^ materialDesign|Card">
+        <Setter Property="Background" Value="{DynamicResource MaterialDesignDarkBackground}" />
+        <Setter Property="Foreground" Value="{DynamicResource MaterialDesignDarkForeground}" />
+      </Style>
+      
+      <Style Selector="^ Button">
+        <Setter Property="Foreground" Value="{DynamicResource SecondaryHueMidBrush}" />
+      </Style>
+    </Style>
+
+    <Style Selector="ComboBox /template/ Panel#PART_RootPanel">
+      <Setter Property="Height" Value="20"/>
+    </Style>
   </Application.Styles>
 </Application>

@@ -52,7 +52,7 @@
         </i:interaction.Behaviors>-->
         <ListBox.Styles>
           <Style Selector="ListBoxItem">
-            <!--<Setter Property="FocusVisualStyle" Value="{x:Null}" />-->
+            <Setter Property="FocusAdorner" Value="{x:Null}" />
             <Setter Property="Padding" Value="8,4,8,4" />
           </Style>
         </ListBox.Styles>
