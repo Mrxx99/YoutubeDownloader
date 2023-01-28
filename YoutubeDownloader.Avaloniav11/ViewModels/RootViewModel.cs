@@ -1,6 +1,10 @@
 using System;
 using System.Threading.Tasks;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Notifications;
+using Avalonia.Threading;
+using Material.Styles.Controls;
+using Material.Styles.Models;
 using YoutubeDownloader.Services;
 using YoutubeDownloader.Utils;
 using YoutubeDownloader.ViewModels.Components;
@@ -18,6 +22,8 @@ public partial class RootViewModel : ViewModelBase
     private WindowNotificationManager? _notificationManager;
 
     public WindowNotificationManager? NotificationManager => _notificationManager ?? new WindowNotificationManager(_viewManager.GetMainWindow());
+
+    private readonly TimeSpan _snackbarMessageDuration = TimeSpan.FromSeconds(5);
 
     public string DisplayName { get; set; }
 
@@ -67,20 +73,24 @@ Press LEARN MORE to find ways that you can help.".Trim(),
             if (updateVersion is null)
                 return;
 
-            NotificationManager?.Show(new Notification(null, $"Downloading update to {App.Name} v{updateVersion}...", NotificationType.Information, TimeSpan.FromSeconds(5)));
+            SnackbarHost.Post(new SnackbarModel($"Downloading update to {App.Name} v{updateVersion}...", _snackbarMessageDuration) , null, DispatcherPriority.Normal);
+            await _updateService.PrepareUpdateAsync(updateVersion);
 
-            //Notifications.Enqueue($"Downloading update to {App.Name} v{updateVersion}...");
-            //await _updateService.PrepareUpdateAsync(updateVersion);
-
-            // TODO
-            //Notifications.Enqueue(
-            //    "Update has been downloaded and will be installed when you exit",
-            //    "INSTALL NOW", () =>
-            //    {
-            //        _updateService.FinalizeUpdate(true);
-            //        RequestClose();
-            //    }
-            //);
+            SnackbarHost.Post(new SnackbarModel(
+                "Update has been downloaded and will be installed when you exit",
+                TimeSpan.FromHours(9),
+                new SnackbarButtonModel
+                {
+                    Text = "INSTALL NOW",
+                    Action = () =>
+                    {
+                        _updateService.FinalizeUpdate(true);
+                        // TODO
+                        (App.Current?.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)!.Shutdown();
+                    }
+                }),
+                null, 
+                DispatcherPriority.Normal);
         }
         catch
         {

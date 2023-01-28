@@ -5,9 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:dialogHost="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
-        xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
-        xmlns:e="clr-namespace:EventBinder;assembly=EventBinder.Avalonia"
+        xmlns:materialDesign="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
         x:Class="YoutubeDownloader.Views.RootView"
         Height="545" Width="600"
         Icon="/Assets/avalonia-logo.ico"
@@ -20,9 +18,11 @@
   <dialogHost:DialogHost
     x:Name="DialogHost"
     CloseOnClickAway="True">
-    <Grid>
-      <ContentControl Content="{Binding Dashboard}"/>
-    </Grid>
+    <materialDesign:SnackbarHost HostName="Root">
+      <Grid>
+        <ContentControl Content="{Binding Dashboard}"/>
+      </Grid>
+    </materialDesign:SnackbarHost>
   </dialogHost:DialogHost>
 
 
