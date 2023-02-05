@@ -63,8 +63,6 @@ public partial class App : Application
             {
                 DataContext = rootViewModel,
             };
-
-            Sanctions.Verify(desktop.MainWindow);
         }
 
         base.OnFrameworkInitializationCompleted();
