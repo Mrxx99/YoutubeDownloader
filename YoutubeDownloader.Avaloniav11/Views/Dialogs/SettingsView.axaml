@@ -156,12 +156,13 @@
                                 VerticalAlignment="Center"
                                 FontWeight="SemiBold"
                                 Text="{Binding ParallelLimit}" />
+                          <!-- TODO: change class to material-v1 for thin slider -->
                             <Slider
                                 Width="150"
                                 VerticalAlignment="Center"
                                 Maximum="10"
                                 Minimum="1"
-                                Classes="MaterialDesignThinSlider"
+                                Classes="material-v1__"
                                 Value="{Binding ParallelLimit}" />
                         </StackPanel>
                     </DockPanel>

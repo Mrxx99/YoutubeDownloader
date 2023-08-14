@@ -21,7 +21,7 @@ public partial class RootViewModel : ViewModelBase
     private readonly UpdateService _updateService;
     private WindowNotificationManager? _notificationManager;
 
-    public WindowNotificationManager? NotificationManager => _notificationManager ?? new WindowNotificationManager(_viewManager.GetMainWindow());
+    public WindowNotificationManager? NotificationManager => _notificationManager ?? new WindowNotificationManager(_viewManager.GetTopLevel());
 
     private readonly TimeSpan _snackbarMessageDuration = TimeSpan.FromSeconds(5);
 

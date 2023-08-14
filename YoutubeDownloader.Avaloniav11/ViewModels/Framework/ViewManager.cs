@@ -1,19 +1,26 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.VisualTree;
 
 namespace YoutubeDownloader.ViewModels.Framework;
 
 public interface IViewManager
 {
-    IControl? CreateAndBindViewForModelIfNecessary(object? model);
-    Window GetMainWindow();
+    Control? CreateAndBindViewForModelIfNecessary(object? model);
+    public TopLevel? GetTopLevel();
 }
 
 public class ViewManager : IViewManager
 {
+    private readonly IApplicationLifetime _applicationLifetime;
     private readonly ViewLocator _viewLocator = new();
 
-    public IControl? CreateAndBindViewForModelIfNecessary(object? model)
+    public ViewManager(IApplicationLifetime applicationLifetime)
+    {
+        _applicationLifetime = applicationLifetime;
+    }
+
+    public Control? CreateAndBindViewForModelIfNecessary(object? model)
     {
         var view = _viewLocator.Match(model) ? _viewLocator.Build(model) : null;
 
@@ -25,8 +32,22 @@ public class ViewManager : IViewManager
         return view;
     }
 
-    public Window GetMainWindow()
+    public TopLevel? GetTopLevel()
     {
-        return ((IClassicDesktopStyleApplicationLifetime)App.Current!.ApplicationLifetime!).MainWindow!;
+        if (_applicationLifetime is IClassicDesktopStyleApplicationLifetime { MainWindow: { } window })
+        {
+            return window;
+        }
+
+        if (_applicationLifetime is ISingleViewApplicationLifetime { MainView: { } mainView })
+        {
+            var visualRoot = mainView.GetVisualRoot();
+            if (visualRoot is TopLevel topLevel)
+            {
+                return topLevel;
+            }
+        }
+
+        return null;
     }
 }

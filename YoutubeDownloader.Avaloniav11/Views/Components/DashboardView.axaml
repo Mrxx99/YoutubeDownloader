@@ -134,7 +134,7 @@
           Background="{DynamicResource MaterialDesignCardBackground}"
           ColumnWidth="Auto"
           HorizontalScrollBarVisibility="Disabled"
-          Items="{Binding Downloads}"
+          ItemsSource="{Binding Downloads}"
           VerticalScrollBarVisibility="Auto"
           IsVisible="{Binding Downloads.Count}">
         <DataGrid.ContextMenu>
@@ -241,7 +241,9 @@
                       <ia:DataTriggerBehavior Binding="{Binding Status}" Value="{x:Static components:DownloadStatus.Failed}">
                         <ia:ChangePropertyAction PropertyName="Foreground" Value="{DynamicResource FailedBrush}"/>
                         <ia:ChangePropertyAction PropertyName="Text" Value="⚠ Failed"/>
-                        <ia:ChangePropertyAction PropertyName="ToolTip.Tip" Value="{Binding ErrorMessage}"/>
+                          <ia:ChangePropertyAction PropertyName="ToolTip.Tip" Value="{Binding ErrorMessage}"/>
+                          <ia:ChangePropertyAction PropertyName="Cursor" Value="Hand"/>
+                          
                       </ia:DataTriggerBehavior>
                     </i:Interaction.Behaviors>
                   </TextBlock>

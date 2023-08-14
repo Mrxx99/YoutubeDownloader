@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Platform.Storage;
-using Avalonia.Platform.Storage.FileIO;
 using DialogHostAvalonia;
 
 namespace YoutubeDownloader.ViewModels.Framework;
@@ -48,56 +47,48 @@ public class DialogManager : IDisposable
 
     public async Task<string?> PromptSaveFilePath(string filter = "All files|*.*", string defaultFilePath = "")
     {
-        var mainWindow = _viewManager.GetMainWindow();
+        var storageProvider = _viewManager.GetTopLevel()?.StorageProvider;
 
-        var filePickResult = await mainWindow.StorageProvider.SaveFilePickerAsync(new()
+        if (storageProvider is null)
+        {
+            return null;
+        }
+
+        var filePickResult = await storageProvider.SaveFilePickerAsync(new()
         {
             FileTypeChoices = ParseFileTypes(filter),
             SuggestedFileName = defaultFilePath,
             DefaultExtension = Path.GetExtension(defaultFilePath).TrimStart('.')
         });
 
-        if (filePickResult?.TryGetUri(out var uri) ?? false)
+        if (filePickResult?.Path is Uri path)
         {
-            return uri.LocalPath;
+            return path.LocalPath;
         }
 
         return null;
-
-
-        IReadOnlyList<FilePickerFileType> ParseFileTypes(string filterString)
-        {
-            var filters = new List<FilePickerFileType>();
-
-            var filterStrings = filterString.Split('|').Chunk(2);
-
-            foreach (var filter in filterStrings)
-            {
-                if (filter.Length == 2)
-                {
-                    var extensions = filter[1].Split(";").ToArray();
-                    filters.Add(new FilePickerFileType(filter[0]) { Patterns = extensions });
-                }
-            }
-
-            return filters;
-        }
     }
 
     public async Task<string?> PromptDirectoryPath(string defaultDirPath = "")
     {
-        var mainWindow = _viewManager.GetMainWindow();
+        var storageProvider = _viewManager.GetTopLevel()?.StorageProvider;
 
-        var folderPickResult = await mainWindow.StorageProvider.OpenFolderPickerAsync(new()
+        if (storageProvider is null)
+        {
+            return null;
+        }
+
+        var startLocation = await GetStorageFolder(storageProvider, defaultDirPath);
+        var folderPickResult = await storageProvider.OpenFolderPickerAsync(new()
         {
             AllowMultiple = false,
-            SuggestedStartLocation = string.IsNullOrEmpty(defaultDirPath) ? null : new BclStorageFolder(defaultDirPath)
+            SuggestedStartLocation = startLocation
         });
 
 
-        if (folderPickResult.FirstOrDefault()?.TryGetUri(out var uri) ?? false)
+        if (folderPickResult.FirstOrDefault()?.Path is Uri path)
         {
-            return uri.LocalPath;
+            return path.LocalPath;
         }
 
         return null;
@@ -106,5 +97,40 @@ public class DialogManager : IDisposable
     public void Dispose()
     {
         _dialogLock.Dispose();
+    }
+
+    private static async Task<IStorageFolder?> GetStorageFolder(IStorageProvider storageProvider, string path)
+    {
+        if (string.IsNullOrEmpty(path))
+        {
+            return null;
+        }
+
+        var storageFolder = await storageProvider.TryGetFolderFromPathAsync(path);
+
+        return storageFolder;
+    }
+
+    private static IReadOnlyList<FilePickerFileType> ParseFileTypes(string filterString)
+    {
+        var filters = new List<FilePickerFileType>();
+
+        var filterStrings = filterString.Split('|').Chunk(2);
+
+        foreach (var filter in filterStrings)
+        {
+            if (filter.Length == 2)
+            {
+                var extensions = filter[1].Split(";").ToArray();
+                var appleTypeIdentifiers = extensions.Select(s => s.Replace("*.", "public.")).ToArray();
+                filters.Add(new FilePickerFileType(filter[0])
+                {
+                    Patterns = extensions,
+                    AppleUniformTypeIdentifiers = appleTypeIdentifiers
+                });
+            }
+        }
+
+        return filters;
     }
 }

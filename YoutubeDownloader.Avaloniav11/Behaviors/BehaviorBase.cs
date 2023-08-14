@@ -5,6 +5,6 @@ using PropertyChanged;
 namespace YoutubeDownloader.Behaviors;
 
 [DoNotNotify]
-public class BehaviorBase<T> : Behavior<T> where T : class, IAvaloniaObject
+public class BehaviorBase<T> : Behavior<T> where T : AvaloniaObject
 {
 }

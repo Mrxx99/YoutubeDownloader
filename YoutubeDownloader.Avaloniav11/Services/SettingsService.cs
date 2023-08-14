@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
+using Avalonia;
+using Avalonia.Platform;
 using Microsoft.Win32;
 using Tyrrrz.Settings;
 using YoutubeDownloader.Core.Downloading;
+using YoutubeDownloader.ViewModels.Framework;
 using YoutubeExplode.Videos.Streams;
 
 namespace YoutubeDownloader.Services;
@@ -11,7 +14,7 @@ public partial class SettingsService : SettingsManager
 {
     public bool IsAutoUpdateEnabled { get; set; } = true;
 
-    public bool IsDarkModeEnabled { get; set; } = IsDarkModeEnabledByDefault();
+    public bool IsDarkModeEnabled { get; set; }
 
     public bool ShouldInjectTags { get; set; } = true;
 
@@ -25,66 +28,11 @@ public partial class SettingsService : SettingsManager
 
     public VideoQualityPreference LastVideoQualityPreference { get; set; } = VideoQualityPreference.Highest;
 
-    public SettingsService()
+    public SettingsService(IPlatformSettings platformSettings)
     {
         Configuration.StorageSpace = StorageSpace.Instance;
         Configuration.SubDirectoryPath = "";
         Configuration.FileName = "Settings.dat";
-    }
-}
-
-public partial class SettingsService
-{
-    private static bool IsDarkModeEnabledByDefault()
-    {
-        if (OperatingSystem.IsWindows())
-        {
-            try
-            {
-                return Registry.CurrentUser.OpenSubKey(
-                    "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
-                    false
-                )?.GetValue("AppsUseLightTheme") is 0;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-        else if (OperatingSystem.IsLinux())
-        {
-            try
-            {
-                string? theme = "light";
-
-                Process p = new Process
-                {
-                    StartInfo = new ProcessStartInfo
-                    {
-                        FileName = "gsettings",
-                        Arguments = "get org.gnome.desktop.interface gtk-theme",
-                        UseShellExecute = false,
-                        RedirectStandardOutput = true,
-                        CreateNoWindow = true
-                    }
-                };
-
-                p.Start();
-
-                while (!p.StandardOutput.EndOfStream)
-                    theme += p.StandardOutput.ReadLine();
-
-                p.WaitForExit();
-
-                return theme?.Contains("dark", StringComparison.OrdinalIgnoreCase) ?? false;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-
-        }
-
-        return false;
+        IsDarkModeEnabled = platformSettings.GetColorValues().ThemeVariant is PlatformThemeVariant.Dark;
     }
 }

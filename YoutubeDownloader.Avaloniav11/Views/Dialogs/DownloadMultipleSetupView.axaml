@@ -44,7 +44,7 @@
           -->
       <ListBox
           Padding="8"
-          Items="{Binding AvailableVideos}"
+          ItemsSource="{Binding AvailableVideos}"
           SelectedItems="{Binding SelectedVideos}"
           SelectionMode="Multiple">
         <!--<i:interaction.Behaviors>
@@ -146,7 +146,7 @@
             Width="150"
             Margin="8,0,0,0"
             VerticalAlignment="Center"
-            Items="{Binding AvailableContainers}"
+            ItemsSource="{Binding AvailableContainers}"
             SelectedItem="{Binding SelectedContainer}" />
       </StackPanel>
 
@@ -160,7 +160,7 @@
             Width="150"
             Margin="8,0,0,0"
             VerticalAlignment="Center"
-            Items="{Binding AvailableVideoQualityPreferences}"
+            ItemsSource="{Binding AvailableVideoQualityPreferences}"
             SelectedItem="{Binding SelectedVideoQualityPreference}">
           <ComboBox.ItemTemplate>
             <DataTemplate>

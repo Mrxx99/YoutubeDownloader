@@ -1,5 +1,6 @@
 using System;
 using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input.Platform;
 using Avalonia.ReactiveUI;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,7 +27,9 @@ internal class Program
         services.AddSingleton<IViewManager, ViewManager>();
         services.AddSingleton<DialogManager>();
         services.AddSingleton<IViewModelFactory, ViewModelFactory>();
-        services.AddTransient<IClipboard>(sp => App.Current!.Clipboard!);
+        services.AddTransient<IClipboard>(sp => sp.GetRequiredService<IViewManager>().GetTopLevel()!.Clipboard!);
+        services.AddTransient<IApplicationLifetime>(sp => App.Current!.ApplicationLifetime!);
+        services.AddSingleton(sp => App.Current!.PlatformSettings!);
 
         var serviceProvider = services.BuildServiceProvider();
 
